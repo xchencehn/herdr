@@ -530,6 +530,10 @@ fn read_initial_request_line_with_limits(
     let deadline = Instant::now() + timeout;
     let mut bytes = Vec::new();
     let mut byte = [0u8; 1];
+    // Clients connect and then write, so the first read usually races the request bytes.
+    // Back off from 1ms instead of sleeping a full poll interval, which added ~100ms to
+    // roughly half of all one-shot API requests (Agent Studio, 2026-09-24).
+    let mut backoff = Duration::from_millis(1);
 
     let result = loop {
         let read = match poll_local_stream_read(stream, &mut byte) {
@@ -559,7 +563,8 @@ fn read_initial_request_line_with_limits(
                         "timed out reading api request",
                     ));
                 }
-                std::thread::sleep(CONNECTION_POLL_INTERVAL);
+                std::thread::sleep(backoff);
+                backoff = (backoff * 2).min(CONNECTION_POLL_INTERVAL);
             }
         }
     };
