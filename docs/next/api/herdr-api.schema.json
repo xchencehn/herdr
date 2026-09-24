@@ -1076,6 +1076,13 @@
             "agent_status": {
               "$ref": "#/schemas/event/$defs/AgentStatus"
             },
+            "cwd": {
+              "description": "The directory the workspace was created in (its persisted identity cwd).\nUnlike `label`, it does not change when the workspace is renamed or when\nthe root pane changes directory. Agent Studio binds a workspace to this directory.",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
             "focused": {
               "type": "boolean"
             },
@@ -10744,6 +10751,13 @@
             },
             "agent_status": {
               "$ref": "#/schemas/success_response/$defs/AgentStatus"
+            },
+            "cwd": {
+              "description": "The directory the workspace was created in (its persisted identity cwd).\nUnlike `label`, it does not change when the workspace is renamed or when\nthe root pane changes directory. Agent Studio binds a workspace to this directory.",
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "focused": {
               "type": "boolean"

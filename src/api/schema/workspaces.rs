@@ -73,6 +73,11 @@ pub struct WorkspaceInfo {
     pub tokens: HashMap<String, String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub worktree: Option<WorkspaceWorktreeInfo>,
+    /// The directory the workspace was created in (its persisted identity cwd).
+    /// Unlike `label`, it does not change when the workspace is renamed or when
+    /// the root pane changes directory. Agent Studio binds a workspace to this directory.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cwd: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, schemars::JsonSchema)]
